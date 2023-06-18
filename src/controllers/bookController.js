@@ -287,7 +287,7 @@ const updateBook = async (req, res) => {
     try {
         const bookId = req.params.bookId;
         const { title, excerpt, releasedAt, ISBN } = req.body;
-        userIdFromToken = req.userId;
+        const userIdFromToken = req.userId;
 
         // BookId Validation
         if(!bookId) {
