@@ -32,8 +32,8 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please add a phone number'],
         unique: [true, 'Phone number already exists'],
         trim: true,
-        minlength: 10,
-        maxlength: 10,
+        // minlength: 10,
+        // maxlength: 10,
         // match: [/^[0-9]{10}$/, 'Please enter a valid phone number'],
         validate: {
             validator: (value) => {

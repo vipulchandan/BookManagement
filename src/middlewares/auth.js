@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const auth = (req, res, next) => {
     try {
-        const token = req.headers['x-access-token'];
+        const token = req.headers['x-api-key'];
         if(!token) {
             return res.status(401).send({
                 status: false,
@@ -18,6 +18,7 @@ const auth = (req, res, next) => {
                 });
             }
             req.userId = decoded.userId;
+            req.name = decoded.name;
             next();
         });
 

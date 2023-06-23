@@ -29,15 +29,15 @@ router.post('/login', loginUser);
 
 // Book Routes
 router.post('/books', auth, createBook);
-router.get('/books', getBooks);
-router.get('/books/:bookId', getBookWithReviews);
+router.get('/books', auth, getBooks);
+router.get('/books/:bookId', auth, getBookWithReviews);
 router.put('/books/:bookId', auth, updateBook);
 router.delete('/books/:bookId', auth, deleteBook);
 
 
 // Review Routes
-router.post('/books/:bookId/review', createReview);
-router.put('/books/:bookId/review/:reviewId', updateReview);
-router.delete('/books/:bookId/review/:reviewId', deleteReview);
+router.post('/books/:bookId/review', auth, createReview);
+router.put('/books/:bookId/review/:reviewId', auth, updateReview);
+router.delete('/books/:bookId/review/:reviewId', auth, deleteReview);
 
 module.exports = router

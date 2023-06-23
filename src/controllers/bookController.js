@@ -142,7 +142,7 @@ const createBook = async (req, res) => {
             subcategory,
             releasedAt: releasedAtDate.slice(0, 10),
         });
-        await newBook.save();
+        // await newBook.save();
 
         res.status(201).send({
             status: true,
@@ -177,19 +177,34 @@ const getBooks = async (req, res) => {
         const filter = {};
         const { userId, category, subcategory } = req.query;
 
+        if(Object.keys(req.query).length === 0) {
+            const getAllBooks = await BookModel.find({ ...filter, isDeleted: false }).select('_id title userId excerpt category releasedAt reviews').sort({ title: 1 });
+            return res.status(200).send({
+                status: true,
+                message: 'Books List',
+                data: getAllBooks
+            });
+        }
+        
         if(userId && mongoose.Types.ObjectId.isValid(userId)) {
             filter.userId = userId;
+        } else {
+            return res.status(400).send({
+                status: false,
+                message: 'Please enter a valid userId'
+            });
         }
-
+        
         if(category) {
             filter.category = category;
             // filter['category'] = category;
         }
-
+        
         if(subcategory) {
             filter.subcategory = subcategory;
         }
-
+        
+        
         const books = await BookModel.find({ ...filter, isDeleted: false }).select('_id title userId excerpt category releasedAt reviews').sort({ title: 1 });
 
         if(books.length === 0) {

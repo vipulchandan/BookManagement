@@ -171,7 +171,8 @@ const loginUser = async (req, res) => {
         const token = jwt.sign(
             {
                 userId: user._id,
-                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7), // expires in 7 days
+                name: user.name,
+                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7), // expires in 7 days. Also, divided by 1000 to convert from milliseconds to seconds
                 iat: Math.floor(Date.now() / 1000) // issued at time of request 
             },
             process.env.JWT_SECRET_KEY, 
@@ -180,7 +181,7 @@ const loginUser = async (req, res) => {
             // }
         );
 
-        res.setHeader('x-access-token', token);
+        res.setHeader('x-api-key', token);
 
         res.status(200).send({
             status: true,

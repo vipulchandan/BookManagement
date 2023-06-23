@@ -1,5 +1,6 @@
 const ReviewModel = require('../models/ReviewModel');
 const BookModel = require('../models/BookModel');
+const UserModel = require('../models/UserModel');
 const { default: mongoose } = require('mongoose');
 
 
@@ -16,6 +17,7 @@ const createReview = async (req, res) => {
     try {
         const { bookId } = req.params;
         const { review, rating, reviewedBy } = req.body;
+        // const userIdFromToken = req.userId;
 
         // Validate bookId
         if(!bookId) {
@@ -76,9 +78,26 @@ const createReview = async (req, res) => {
             });
         }
 
+        // Validate userId
+        // if(!mongoose.Types.ObjectId.isValid(userIdFromToken)) {
+        //     return res.status(400).send({
+        //         status: false,
+        //         message: `${userIdFromToken} is not a valid user token id`
+        //     });
+        // }
+
         // Update the book document with the new review
         book.reviews += 1;
         const updatedBook = await book.save();
+
+        
+        // let reviewerName;
+        // // Validate user
+        // if(book.userId.toString() !== userIdFromToken) {
+        //     reviewerName = req.name;
+        // } else {
+        //     reviewerName = reviewedBy;
+        // }
 
         // Add review
         const reviewsData = new ReviewModel({
@@ -159,12 +178,12 @@ const updateReview = async (req, res) => {
         }
 
         // Validate review, rating, reviewedBy
-        if(!review || !rating || !reviewedBy) {
-            return res.status(400).send({
-                status: false,
-                message: 'Please enter a review, rating, and reviewers name for the review to be updated'
-            });
-        }
+        // if(!review || !rating || !reviewedBy) {
+        //     return res.status(400).send({
+        //         status: false,
+        //         message: 'Please enter a review, rating, and reviewers name for the review to be updated'
+        //     });
+        // }
         // if(!review) {
         //     return res.status(400).send({
         //         status: false,
