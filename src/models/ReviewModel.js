@@ -9,8 +9,7 @@ const reviewSchema = new mongoose.Schema({
     reviewedBy: {
         type: String,
         required: [true, 'Please add a reviewedBy'],
-        default: 'Anonymous Guest',
-        value: 'Anonymous Guest'
+        default: 'Guest'
     },
     reviewedAt: {
         type: Date,
