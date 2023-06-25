@@ -100,16 +100,6 @@ const registerUser = async (req, res) => {
             });
         }
 
-        // // Encrypt password
-        // const salt = await bcrypt.genSalt(10);
-        // const hashedPassword = await bcrypt.hash(user.password, salt);
-        
-        // // Create new user
-        // const newUser = await UserModel.create({
-        //     ...user,
-        //     password: hashedPassword
-        // });
-
         const newUser = await UserModel.create(user);
 
         return res.status(201).send({

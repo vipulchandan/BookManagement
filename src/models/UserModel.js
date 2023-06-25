@@ -1,18 +1,3 @@
-// { 
-//     title: {string, mandatory, enum[Mr, Mrs, Miss]},
-//     name: {string, mandatory},
-//     phone: {string, mandatory, unique},
-//     email: {string, mandatory, valid email, unique}, 
-//     password: {string, mandatory, minLen 8, maxLen 15},
-//     address: {
-//       street: {string},
-//       city: {string},
-//       pincode: {string}
-//     },
-//     createdAt: {timestamp},
-//     updatedAt: {timestamp}
-//   }
-
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -32,9 +17,6 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please add a phone number'],
         unique: [true, 'Phone number already exists'],
         trim: true,
-        // minlength: 10,
-        // maxlength: 10,
-        // match: [/^[0-9]{10}$/, 'Please enter a valid phone number'],
         validate: {
             validator: (value) => {
                 const phoneRegex = /^[0-9]{10}$/;
@@ -48,7 +30,6 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please add an email'],
         unique: [true, 'Email already exists'],
         trim: true,
-        // match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         validate: {
             validator: (value) => {
                 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

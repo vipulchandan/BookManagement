@@ -47,17 +47,11 @@ const bookSchema = new mongoose.Schema({
         default: false
     },
     releasedAt: {
-        type: String,
+        type: Date,
+        // type: String,
         trim: true,
         required: [true, 'Please add a releasedAt'],
         format: 'YYYY-MM-DD',
-        // validate: {
-        //     validator: (value) => {
-        //         const releasedAtRegex = /((\d{4}[\/-])(\d{2}[\/-])(\d{2}))/;
-        //         return releasedAtRegex.test(value);
-        //     },
-        //     message: 'Please enter a valid releasedAt'
-        // }
     }
 }, { timestamps: true });
 

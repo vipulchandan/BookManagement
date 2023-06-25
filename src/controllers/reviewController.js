@@ -78,14 +78,6 @@ const createReview = async (req, res) => {
             });
         }
 
-        // Validate userId
-        // if(!mongoose.Types.ObjectId.isValid(userIdFromToken)) {
-        //     return res.status(400).send({
-        //         status: false,
-        //         message: `${userIdFromToken} is not a valid user token id`
-        //     });
-        // }
-
         // Update the book document with the new review
         book.reviews += 1;
         const updatedBook = await book.save();
@@ -113,13 +105,6 @@ const createReview = async (req, res) => {
             ...updatedBook._doc, 
             reviewsData
         }
-
-        // Update book
-        // const newBook = await BookModel.updateOne(
-        //     { _id: bookId }, 
-        //     { $inc: { reviews: 1 } },
-        //     { new: true },         
-        // );
 
         res.status(200).send({
             status: true,
@@ -177,31 +162,7 @@ const updateReview = async (req, res) => {
             });
         }
 
-        // Validate review, rating, reviewedBy
-        // if(!review || !rating || !reviewedBy) {
-        //     return res.status(400).send({
-        //         status: false,
-        //         message: 'Please enter a review, rating, and reviewers name for the review to be updated'
-        //     });
-        // }
-        // if(!review) {
-        //     return res.status(400).send({
-        //         status: false,
-        //         message: 'Review is required'
-        //     });
-        // }
-        // if(!reviewedBy) {
-        //     return res.status(400).send({
-        //         status: false,
-        //         message: 'Please enter a reviewers name'
-        //     });
-        // }
-        // if(!rating) {
-        //     return res.status(400).send({
-        //         status: false,
-        //         message: 'Rating is required'
-        //     });
-        // }
+
         if(!Number.isInteger(rating)) {
             return res.status(400).send({
                 status: false,

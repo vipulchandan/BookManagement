@@ -118,9 +118,6 @@ const createBook = async (req, res) => {
             });
         }
 
-        // console.log(user._id);
-        // console.log(userId);
-        // console.log(userIdFromToken);
         // Validate user
         if(userId !== userIdFromToken) {
             return res.status(403).send({
@@ -185,14 +182,16 @@ const getBooks = async (req, res) => {
                 data: getAllBooks
             });
         }
-        
-        if(userId && mongoose.Types.ObjectId.isValid(userId)) {
-            filter.userId = userId;
-        } else {
+
+        if(!mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).send({
                 status: false,
                 message: 'Please enter a valid userId'
             });
+        }
+        
+        if(userId && mongoose.Types.ObjectId.isValid(userId)) {
+            filter.userId = userId;
         }
         
         if(category) {
@@ -334,9 +333,6 @@ const updateBook = async (req, res) => {
             });
         }
 
-        // console.log(book.userId);
-        // console.log(book.userId.toString());
-        // console.log(userIdFromToken);
         // User Validation
         if(book.userId.toString() !== userIdFromToken) {
             return res.status(403).send({
@@ -369,16 +365,6 @@ const updateBook = async (req, res) => {
         book.releasedAt = releasedAt;
         book.ISBN = ISBN;
         const updatedBook = await book.save(); 
-        // const updatedBook = await BookModel.findOneAndUpdate(
-        //     { _id: bookId },
-        //     {
-        //         title,
-        //         excerpt,
-        //         releasedAt,
-        //         ISBN
-        //     },
-        //     { new: true }
-        // );
 
         res.status(200).send({
             status: true,
@@ -434,10 +420,7 @@ const deleteBook = async (req, res) => {
                 message: 'Book not found'
             });
         }
-
-        // console.log(book.userId);
-        // console.log(book.userId.toString());
-        // console.log(userIdFromToken);
+        
         // User Validation
         if(book.userId.toString() !== userIdFromToken) {
             return res.status(403).send({
@@ -449,10 +432,6 @@ const deleteBook = async (req, res) => {
         book.isDeleted = true;
         book.deletedAt = new Date();
         await book.save();
-        // await BookModel.findOneAndUpdate(
-        //     { _id: bookId },
-        //     { isDeleted: true }
-        // );
 
         res.status(200).send({
             status: true,
