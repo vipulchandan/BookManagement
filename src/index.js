@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const multer = require('multer');
 
 const routes = require('./routes/route');
 
@@ -18,6 +19,8 @@ mongoose.connect(process.env.MONGO_URI, {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(multer().any());
 
 app.use('/', routes);
 

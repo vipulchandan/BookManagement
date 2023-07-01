@@ -52,6 +52,10 @@ const bookSchema = new mongoose.Schema({
         trim: true,
         required: [true, 'Please add a releasedAt'],
         format: 'YYYY-MM-DD',
+    },
+    bookCover: {
+        type: String,
+        trim: true
     }
 }, { timestamps: true });
 

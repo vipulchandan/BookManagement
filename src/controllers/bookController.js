@@ -3,7 +3,55 @@ const BookModel = require('../models/BookModel');
 const UserModel = require('../models/UserModel');
 const ReviewModel = require('../models/ReviewModel');
 const moment = require('moment');
+const AWS = require('aws-sdk');
 
+// let uploadFile= async (file) =>{
+//     return new Promise( function(resolve, reject) {
+//         let s3= new AWS.S3({apiVersion: '2006-03-01'}); 
+
+//         var uploadParams= {
+//             ACL: "public-read",
+//             Bucket: "classroom-training-bucket", 
+//             Key: "abc/" + file.originalname, 
+//             Body: file.buffer
+//         }
+
+
+//         s3.upload( uploadParams, function (err, data ){
+//             if(err) {
+//                 return reject({"error": err})
+//             }
+//             console.log(data)
+//             console.log("file uploaded succesfully")
+//             return resolve(data.Location)
+//         })
+
+//     })
+// }
+
+const uploadFile = async (file) => {
+    try {
+      const s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+  
+      const uploadParams = {
+        ACL: 'public-read',
+        Bucket: 'classroom-training-bucket',
+        Key: 'abc/' + file.originalname,
+        Body: file.buffer,
+        ContentType: file.mimetype
+      };
+  
+      const uploadResult = await s3.upload(uploadParams).promise();
+  
+      console.log(uploadResult);
+      console.log('File uploaded successfully');
+  
+      return uploadResult.Location;
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      throw error;
+    }
+};
 
 /*
 POST /books
@@ -13,11 +61,25 @@ Return HTTP status 201 on a succesful book creation. Also return the book docume
 Create atleast 10 books for each user
 Return HTTP status 400 for an invalid request with a response body
 */
+/*
+ add bookCover(string) key in your bookModel in Book managemt project. When book is being created , take up the book cover as an image , upload it to s3 and save the url in bookCover key.
+*/
 
 const createBook = async (req, res) => {
     try {
         const { userId, title, excerpt, ISBN, category, subcategory, releasedAt } = req.body;
         const userIdFromToken = req.userId;
+
+        const files = req.files;
+
+        if(files && files.length>0){
+            let uploadedFileURL= await uploadFile( files[0] )
+            // res.status(201).send({msg: "file uploaded succesfully", data: uploadedFileURL})
+            req.body.bookCover = uploadedFileURL
+        }
+        else{
+            res.status(400).send({ msg: "No file found" })
+        }
 
         // Validate userId
         if(!userId) {
@@ -138,6 +200,7 @@ const createBook = async (req, res) => {
             category,
             subcategory,
             releasedAt: releasedAtDate.slice(0, 10),
+            bookCover: req.body.bookCover
         });
         // await newBook.save();
 
