@@ -3,55 +3,7 @@ const BookModel = require('../models/BookModel');
 const UserModel = require('../models/UserModel');
 const ReviewModel = require('../models/ReviewModel');
 const moment = require('moment');
-const AWS = require('aws-sdk');
-
-// let uploadFile= async (file) =>{
-//     return new Promise( function(resolve, reject) {
-//         let s3= new AWS.S3({apiVersion: '2006-03-01'}); 
-
-//         var uploadParams= {
-//             ACL: "public-read",
-//             Bucket: "classroom-training-bucket", 
-//             Key: "abc/" + file.originalname, 
-//             Body: file.buffer
-//         }
-
-
-//         s3.upload( uploadParams, function (err, data ){
-//             if(err) {
-//                 return reject({"error": err})
-//             }
-//             console.log(data)
-//             console.log("file uploaded succesfully")
-//             return resolve(data.Location)
-//         })
-
-//     })
-// }
-
-const uploadFile = async (file) => {
-    try {
-      const s3 = new AWS.S3({ apiVersion: '2006-03-01' });
-  
-      const uploadParams = {
-        ACL: 'public-read',
-        Bucket: 'classroom-training-bucket',
-        Key: 'abc/' + file.originalname,
-        Body: file.buffer,
-        ContentType: file.mimetype
-      };
-  
-      const uploadResult = await s3.upload(uploadParams).promise();
-  
-      console.log(uploadResult);
-      console.log('File uploaded successfully');
-  
-      return uploadResult.Location;
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      throw error;
-    }
-};
+const { uploadBookCover } = require('../utils/awsConfig');
 
 /*
 POST /books
@@ -73,7 +25,7 @@ const createBook = async (req, res) => {
         const files = req.files;
 
         if(files && files.length>0){
-            let uploadedFileURL= await uploadFile( files[0] )
+            let uploadedFileURL= await uploadBookCover( files[0] )
             // res.status(201).send({msg: "file uploaded succesfully", data: uploadedFileURL})
             req.body.bookCover = uploadedFileURL
         }
